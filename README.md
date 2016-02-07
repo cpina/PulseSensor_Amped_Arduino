@@ -1,3 +1,9 @@
+This is a fork in order to use the www.pulsesensor.com (this code is based on
+that one) and https://www.adafruit.com/products/1077 product.
+So, two people can compare heartbeats.
+
+It will include a Python script and Gnuplot script to visualize it.
+
 ![logo](https://avatars0.githubusercontent.com/u/7002937?v=3&s=200)
 
 ## Pulse Sensor Arduino Code

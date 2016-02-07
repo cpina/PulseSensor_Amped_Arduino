@@ -27,7 +27,7 @@ volatile boolean Pulse = false;     // "True" when User's live heartbeat is dete
 volatile boolean QS = false;        // becomes true when Arduoino finds a beat.
 
 // Regards Serial OutPut  -- Set This Up to your needs
-static boolean serialVisual = false;   // Set to 'false' by Default.  Re-set to 'true' to see Arduino Serial Monitor ASCII Visual Pulse 
+static boolean serialVisual = true;   // Set to 'false' by Default.  Re-set to 'true' to see Arduino Serial Monitor ASCII Visual Pulse 
 
 
 void setup(){
@@ -35,6 +35,7 @@ void setup(){
   pinMode(fadePin,OUTPUT);          // pin that will fade to your heartbeat!
   Serial.begin(115200);             // we agree to talk fast!
   interruptSetup();                 // sets up to read Pulse Sensor signal every 2mS 
+  Serial.println("setup() ran!");
    // IF YOU ARE POWERING The Pulse Sensor AT VOLTAGE LESS THAN THE BOARD VOLTAGE, 
    // UN-COMMENT THE NEXT LINE AND APPLY THAT VOLTAGE TO THE A-REF PIN
 //   analogReference(EXTERNAL);   
@@ -44,7 +45,7 @@ void setup(){
 //  Where the Magic Happens
 void loop(){
   
-    serialOutput() ;       
+  // serialOutput() ;       
     
   if (QS == true){     // A Heartbeat Was Found
                        // BPM and IBI have been Determined
@@ -56,8 +57,8 @@ void loop(){
         QS = false;                      // reset the Quantified Self flag for next time    
   }
      
-  ledFadeToBeat();                      // Makes the LED Fade Effect Happen 
-  delay(20);                             //  take a break
+  // ledFadeToBeat();                      // Makes the LED Fade Effect Happen 
+  // delay(20);                             //  take a break
 }
 
 
