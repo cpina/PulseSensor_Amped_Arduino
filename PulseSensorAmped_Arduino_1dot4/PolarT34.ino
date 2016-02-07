@@ -67,11 +67,12 @@ void PolarT34() {
   if (sample && (oldSample != sample)) {
     unsigned long now = millis();
     appendIntoBeatTimes(now);
-  
-    if (now > lastCalculation + refreshSeconds) {
+
+    showBpm();
+    /*if (now > lastCalculation + refreshSeconds) {
         showBpm();
         lastCalculation = now; 
-    }
+    }*/
     
 //     blinkLed();
   }

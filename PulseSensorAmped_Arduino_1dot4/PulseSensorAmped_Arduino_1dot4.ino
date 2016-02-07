@@ -50,10 +50,7 @@ void setup(){
 
 
 //  Where the Magic Happens
-void loop(){
-  
-  // serialOutput() ;       
-    
+void loop(){    
   if (QS == true){     // A Heartbeat Was Found
                        // BPM and IBI have been Determined
                        // Quantified Self "QS" true when arduino finds a heartbeat
