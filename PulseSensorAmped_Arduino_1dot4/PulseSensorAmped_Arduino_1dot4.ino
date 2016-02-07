@@ -51,19 +51,17 @@ void loop(){
                        // BPM and IBI have been Determined
                        // Quantified Self "QS" true when arduino finds a heartbeat
         digitalWrite(blinkPin,HIGH);     // Blink LED, we got a beat. 
-        fadeRate = 255;         // Makes the LED Fade Effect Happen
                                 // Set 'fadeRate' Variable to 255 to fade LED with pulse
         serialOutputWhenBeatHappens();   // A Beat Happened, Output that to serial.     
         QS = false;                      // reset the Quantified Self flag for next time    
   }
-     
+  
+  
+  
+  
   // ledFadeToBeat();                      // Makes the LED Fade Effect Happen 
   // delay(20);                             //  take a break
 }
-
-
-
-
 
 void ledFadeToBeat(){
     fadeRate -= 15;                         //  set LED fade value
