@@ -13,6 +13,8 @@ https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/
  ----------------------       ----------------------  ----------------------
 */
 
+
+
 //  Variables
 int pulsePin = 0;                 // Pulse Sensor purple wire connected to analog pin 0
 int blinkPin = 13;                // pin to blink led at each beat
@@ -36,9 +38,14 @@ void setup(){
   Serial.begin(115200);             // we agree to talk fast!
   interruptSetup();                 // sets up to read Pulse Sensor signal every 2mS 
   Serial.println("setup() ran!");
+  
+  setupPolarT34();
+  
    // IF YOU ARE POWERING The Pulse Sensor AT VOLTAGE LESS THAN THE BOARD VOLTAGE, 
    // UN-COMMENT THE NEXT LINE AND APPLY THAT VOLTAGE TO THE A-REF PIN
 //   analogReference(EXTERNAL);   
+
+  // setupPolarT34();
 }
 
 
@@ -57,7 +64,7 @@ void loop(){
   }
   
   
-  
+  PolarT34();
   
   // ledFadeToBeat();                      // Makes the LED Fade Effect Happen 
   // delay(20);                             //  take a break
