@@ -17,9 +17,9 @@ void serialOutput(){   // Decide How To Output Serial.
 //  Decides How To OutPut BPM and IBI Data
 void serialOutputWhenBeatHappens(){    
  if (serialVisual == true){            //  Code to Make the Serial Monitor Visualizer Work
-    Serial.print("BPM2: ");
+    Serial.print("PulseSensor: ");
     Serial.print(BPM);
-    Serial.println("");
+    Serial.println("bpm");
  } else{
         sendDataToSerial('B',BPM);   // send heart rate with a 'B' prefix
         sendDataToSerial('Q',IBI);   // send time between beats with a 'Q' prefix

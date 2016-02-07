@@ -16,14 +16,10 @@ void setupPolarT34() {
 
   pinMode(LED, OUTPUT);
 
-  Serial.println("Waiting for heart beat...");
 
-  //Wait until a heart beat is detected  
-  while (!digitalRead(HR_RX)) {
-  };
-  Serial.println ("Heart beat detected!");
-
+  Serial.println("setupPolarT34() finished!");
 }
+
 void showBeatTimes() {
    Serial.print(beatTimes[0]);
    Serial.print(":");
@@ -52,16 +48,16 @@ void appendIntoBeatTimes(unsigned long beatTime) {
 void showBpm() {
   if (beatTimes[0] != 0 && beatTimes[sizeOfBeatTimes()-1] != 0) {
     unsigned long bpm = sizeOfBeatTimes() / ((beatTimes[sizeOfBeatTimes()-1] - beatTimes[0]) / 1000.0 / 60.0);
-    Serial.print("BPM1:");
+    Serial.print("Polar: ");
     Serial.print(BPM);
-    Serial.println("");
+    Serial.println("bpm");
   }
   else {
      Serial.println("Not enough data"); 
   }
 }
 
-void PolarT34() {
+void loopPolarT34() {
   sample = digitalRead(HR_RX);  //Store signal output 
 
   if (sample && (oldSample != sample)) {

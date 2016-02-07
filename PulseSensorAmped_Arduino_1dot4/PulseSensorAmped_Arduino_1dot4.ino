@@ -13,8 +13,6 @@ https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/
  ----------------------       ----------------------  ----------------------
 */
 
-
-
 //  Variables
 int pulsePin = 0;                 // Pulse Sensor purple wire connected to analog pin 0
 int blinkPin = 13;                // pin to blink led at each beat
@@ -32,25 +30,19 @@ volatile boolean QS = false;        // becomes true when Arduoino finds a beat.
 static boolean serialVisual = true;   // Set to 'false' by Default.  Re-set to 'true' to see Arduino Serial Monitor ASCII Visual Pulse 
 
 
-void setup(){
+void setupPulseSensor(){
   pinMode(blinkPin,OUTPUT);         // pin that will blink to your heartbeat!
   pinMode(fadePin,OUTPUT);          // pin that will fade to your heartbeat!
-  Serial.begin(115200);             // we agree to talk fast!
   interruptSetup();                 // sets up to read Pulse Sensor signal every 2mS 
-  Serial.println("setup() ran!");
-  
-  setupPolarT34();
+  Serial.println("setupPulseSensor() finished!");
   
    // IF YOU ARE POWERING The Pulse Sensor AT VOLTAGE LESS THAN THE BOARD VOLTAGE, 
    // UN-COMMENT THE NEXT LINE AND APPLY THAT VOLTAGE TO THE A-REF PIN
-//   analogReference(EXTERNAL);   
-
-  // setupPolarT34();
+   //   analogReference(EXTERNAL);   
 }
 
 
-//  Where the Magic Happens
-void loop(){    
+void loopPulseSensor(){    
   if (QS == true){     // A Heartbeat Was Found
                        // BPM and IBI have been Determined
                        // Quantified Self "QS" true when arduino finds a heartbeat
@@ -59,9 +51,6 @@ void loop(){
         serialOutputWhenBeatHappens();   // A Beat Happened, Output that to serial.     
         QS = false;                      // reset the Quantified Self flag for next time    
   }
-  
-  
-  PolarT34();
   
   // ledFadeToBeat();                      // Makes the LED Fade Effect Happen 
   // delay(20);                             //  take a break
