@@ -4,7 +4,7 @@ void setup(){
   setupPolarT34();
 }
 
-void loop(){    
+void loop(){
   loopPulseSensor();
   loopPolarT34();
 }

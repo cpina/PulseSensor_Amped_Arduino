@@ -9,7 +9,6 @@ byte oldSample, sample;
 boolean ledLight = false; 
 unsigned long beatTimes[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long lastCalculation;
-unsigned long refreshSeconds  = 2000;
 
 void setupPolarT34() {
   pinMode (HR_RX, INPUT);  //Signal pin to input  
@@ -30,6 +29,16 @@ void showBeatTimes() {
    Serial.print(beatTimes[3]);
    Serial.print(":");
    Serial.print(beatTimes[4]);
+   Serial.print(":");
+   Serial.print(beatTimes[5]);
+   Serial.print(":");
+   Serial.print(beatTimes[6]);
+   Serial.print(":");
+   Serial.print(beatTimes[7]);
+   Serial.print(":");
+   Serial.print(beatTimes[8]);
+   Serial.print(":");
+   Serial.print(beatTimes[9]);
    Serial.println("");
 }
 
@@ -48,9 +57,11 @@ void appendIntoBeatTimes(unsigned long beatTime) {
 void showBpm() {
   if (beatTimes[0] != 0 && beatTimes[sizeOfBeatTimes()-1] != 0) {
     unsigned long bpm = sizeOfBeatTimes() / ((beatTimes[sizeOfBeatTimes()-1] - beatTimes[0]) / 1000.0 / 60.0);
-    Serial.print("Polar: ");
-    Serial.print(BPM);
+    Serial.print("Polar      : ");
+    Serial.print(bpm);
     Serial.println("bpm");
+    Serial.println(sizeOfBeatTimes());
+    showBeatTimes();
   }
   else {
      Serial.println("Not enough data"); 
@@ -65,10 +76,6 @@ void loopPolarT34() {
     appendIntoBeatTimes(now);
 
     showBpm();
-    /*if (now > lastCalculation + refreshSeconds) {
-        showBpm();
-        lastCalculation = now; 
-    }*/
     
 //     blinkLed();
   }

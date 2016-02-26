@@ -48,6 +48,7 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
       Pulse = true;                               // set the Pulse flag when we think there is a pulse
       digitalWrite(blinkPin,HIGH);                // turn on pin 13 LED
       IBI = sampleCounter - lastBeatTime;         // measure time between beats in mS
+      Serial.println(IBI);
       lastBeatTime = sampleCounter;               // keep track of time for next pulse
 
       if(secondBeat){                        // if this is the second beat, if secondBeat == TRUE
@@ -74,6 +75,9 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
       }
 
       rate[9] = IBI;                          // add the latest IBI to the rate array
+      
+      
+      
       runningTotal += rate[9];                // add the latest IBI to runningTotal
       runningTotal /= 10;                     // average the last 10 IBI values 
       BPM = 60000/runningTotal;               // how many beats can fit into a minute? that's BPM!
@@ -83,7 +87,6 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
   }
 
   if (Signal < thresh && Pulse == true){   // when the values are going down, the beat is over
-   digitalWrite(blinkPin,LOW);            // turn off pin 13 LED
     Pulse = false;                         // reset the Pulse flag so we can do it again
     amp = P - T;                           // get amplitude of the pulse wave
     thresh = amp/2 + T;                    // set thresh at 50% of the amplitude

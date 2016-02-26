@@ -20,14 +20,14 @@ def detect_serial():
 
     return None
 
-def write_informations(last_informations, time_stamp, output):
+def write_informations(last_informations, time_stamp, name, output):
     line = ""
     keys=list(last_informations.keys())
     keys.sort()
     
     line=str(time_stamp)
     for key in keys:
-        line += "," + last_informations[key][1]
+        line += "," + last_informations[key][1] + "," + name
 
     line += "\n"
     output.write(line)
@@ -39,7 +39,7 @@ def main():
     print("Found:",serialPort)
     ser = serial.Serial(serialPort)
 
-    file_name=time.strftime("%Y%m%d-%H%M%S.csv")
+    file_name=time.strftime("session-%Y%m%d-%H%M%S.csv")
 
     output=open(file_name,"a")
 
@@ -68,7 +68,7 @@ def main():
             time_stamp=time.time()-start_time
             last_informations[name] = (time_stamp, bpm)
 
-            write_informations(last_informations, time_stamp, output)
+            write_informations(last_informations, time_stamp, name, output)
 
 if __name__ == "__main__":
     main()
