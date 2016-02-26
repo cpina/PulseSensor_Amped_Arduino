@@ -13,8 +13,9 @@ file_name = "session-20160224-224117.csv"
 latest_timestamp = find_latest_timestamp(file_name)
 
 while True:
+    latest_timestamp += 1
     with open(file_name, "a") as f:
-        f.write("{},{},{}\n".format(latest_timestamp + 1, random.randint(70,120), "Polar"))
+        f.write("{},{},{}\n".format(latest_timestamp, random.randint(70,120), "Polar"))
         f.write("{},{},{}\n".format(latest_timestamp + 1, random.randint(70,120), "PulseSensor"))
 
     time.sleep(1)

@@ -21,6 +21,10 @@ private slots:
     void updateData();
 
 private:
+    void drawLinePoints(QPainter *painter, FileReader::HeartBeat heartBeat1, FileReader::HeartBeat heartBeat2, quint64 minimumTimestamp, quint64 maximumTimestamp, const QColor &color);
+    void updateInformation();
+    void updateGraphic();
+
     Ui::MainWindow *ui;
     FileReader m_fileReader;
 };
