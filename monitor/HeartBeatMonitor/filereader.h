@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QHash>
+#include <QDebug>
 
 class FileReader : public QObject
 {
@@ -37,5 +38,7 @@ private:
 
     QHash<QString, HeartBeatList> m_heartBeatData;
 };
+
+QDebug operator<<(QDebug debug, const FileReader::HeartBeat &heartBeat);
 
 #endif // FILEREADER_H

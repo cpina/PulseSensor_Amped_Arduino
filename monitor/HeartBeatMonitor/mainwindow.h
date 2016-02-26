@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void updateData();
+
 private:
     Ui::MainWindow *ui;
     FileReader m_fileReader;

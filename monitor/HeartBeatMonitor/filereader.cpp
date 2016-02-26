@@ -2,7 +2,6 @@
 
 #include <QFileInfoList>
 #include <QDir>
-#include <QDebug>
 
 FileReader::FileReader(QObject* parent)
     :
@@ -12,12 +11,9 @@ FileReader::FileReader(QObject* parent)
             this, SLOT(readFile()));
 
     m_timer.setInterval(2000);
-    m_timer.start(2000);
-    QString filePath = findFile();
+    m_timer.start();
 
-    qDebug() << "will open:" << filePath;
-    m_file.reset(new QFile(filePath));
-    m_file->open(QIODevice::ReadOnly | QIODevice::Append);
+    readFile();
 }
 
 FileReader::~FileReader()
@@ -62,7 +58,6 @@ void FileReader::readFile()
 
         m_heartBeatData[heartDevice].append(heartBeat);
     } while(!line.isNull());
-
 
     emit dataUpdated();
 }
