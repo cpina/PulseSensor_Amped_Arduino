@@ -48,7 +48,6 @@ ISR(TIMER2_COMPA_vect){                         // triggered when Timer2 counts 
       Pulse = true;                               // set the Pulse flag when we think there is a pulse
       digitalWrite(blinkPin,HIGH);                // turn on pin 13 LED
       IBI = sampleCounter - lastBeatTime;         // measure time between beats in mS
-      Serial.println(IBI);
       lastBeatTime = sampleCounter;               // keep track of time for next pulse
 
       if(secondBeat){                        // if this is the second beat, if secondBeat == TRUE

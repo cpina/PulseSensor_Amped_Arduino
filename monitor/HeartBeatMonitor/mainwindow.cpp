@@ -33,9 +33,43 @@ void MainWindow::updateInformation()
         {
             information += "<br>";
         }
-        information += QString("<b>%1:</b> %2").arg(device).arg(heartBeats.value(device).last().bpm);
+        QString color;
+        if (device == "Polar")
+        {
+            color="red";
+        }
+        else
+        {
+            color="green";
+        }
+        information += QString("<b><font color=\"%1\">%2:</font></b> %3").arg(color).arg(device).arg(heartBeats.value(device).last().bpm);
     }
     ui->information->setText(information);
+}
+
+void MainWindow::drawVerticalScale(QPainter* painter)
+{
+    QPoint p1;
+    QPoint p2;
+
+    for (int bpm = 40; bpm < 180; bpm += 20)
+    {
+        int height = ui->graph->height();
+        int width = ui->graph->width();
+
+        p1.setX(50);
+        p1.setY(height - ((bpm / 160.0) * height));
+
+        p2.setX(width);
+        p2.setY(height - ((bpm / 160.0) * height));
+
+        painter->setPen(QPen(Qt::gray, 2));
+        painter->drawLine(p1, p2);
+
+        p1.setX(p1.x()-40);
+        p1.setY(p1.y());
+        painter->drawText(p1, QString::number(bpm));
+    }
 }
 
 void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBeat1, FileReader::HeartBeat heartBeat2, quint64 minimumTimestamp, quint64 maximumTimestamp, const QColor& color)
@@ -49,16 +83,13 @@ void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBe
     int x;
 
     x = (float(heartBeat1.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
-    qDebug() << "heartBeat1:" << heartBeat1.msTimeStamp;
-    qDebug() << "minimumTimestamp:" << minimumTimestamp;
-    qDebug() << "maximumTimestamp:" << maximumTimestamp;
-    qDebug() << "x:" << x;
+
     p1.setX(x);
-    p1.setY((heartBeat1.bpm / 160.0) * height);
+    p1.setY(height - ((heartBeat1.bpm / 160.0) * height));
 
     x = (float(heartBeat2.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
     p2.setX(x);
-    p2.setY((heartBeat2.bpm / 160.0) * height);
+    p2.setY(height - ((heartBeat2.bpm / 160.0) * height));
 
     painter->setPen(QPen(color, 2));
     painter->drawLine(p1, p2);
@@ -71,11 +102,9 @@ void MainWindow::updateGraphic()
     QPicture picture;
     QPainter painter(&picture);
 
-    int width = ui->graph->width();
-    int height = ui->graph->height();
-
     Q_FOREACH(const QString& device, heartBeatsData.keys())
     {
+        qDebug() << "Device" << device;
         QColor color = Qt::black;
 
         if (device == "Polar")
@@ -113,6 +142,8 @@ void MainWindow::updateGraphic()
         {
             drawLinePoints(&painter, heartBeats.at(i), heartBeats.at(i-1), minimum, maximum, color);
         }
+
+        drawVerticalScale(&painter);
     }
 
     ui->graph->setPicture(picture);

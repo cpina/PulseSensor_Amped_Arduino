@@ -24,6 +24,7 @@ private:
     void drawLinePoints(QPainter *painter, FileReader::HeartBeat heartBeat1, FileReader::HeartBeat heartBeat2, quint64 minimumTimestamp, quint64 maximumTimestamp, const QColor &color);
     void updateInformation();
     void updateGraphic();
+    void drawVerticalScale(QPainter* painter);
 
     Ui::MainWindow *ui;
     FileReader m_fileReader;

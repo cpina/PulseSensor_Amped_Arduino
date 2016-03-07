@@ -20,6 +20,7 @@ def detect_serial():
 
     return None
 
+"""
 def write_informations(last_informations, time_stamp, name, output):
     line = ""
     keys=list(last_informations.keys())
@@ -32,12 +33,13 @@ def write_informations(last_informations, time_stamp, name, output):
     line += "\n"
     output.write(line)
     output.flush()
+"""
 
 def main():
     serialPort=find_serial()
     time.sleep(2)
     print("Found:",serialPort)
-    ser = serial.Serial(serialPort)
+    ser = serial.Serial(serialPort, baudrate=115200)
 
     file_name=time.strftime("session-%Y%m%d-%H%M%S.csv")
 
@@ -54,11 +56,12 @@ def main():
 
         print(t)
 
-        m=re.search("^(.*): ([0-9]+)bpm$", t)
+        m=re.search("^([^ ]+) *: ([0-9]+)bpm$", t)
         if m:
             name=m.group(1)
             bpm=m.group(2)
 
+            print("Processed:",name,bpm)
             if name not in ['Polar', 'PulseSensor']:
                 continue
 
@@ -66,9 +69,9 @@ def main():
                 continue
 
             time_stamp=time.time()-start_time
-            last_informations[name] = (time_stamp, bpm)
 
-            write_informations(last_informations, time_stamp, name, output)
+            output.write("{},{},{}\n".format(time_stamp, bpm, name))
+            output.flush()
 
 if __name__ == "__main__":
     main()

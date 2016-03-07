@@ -2,13 +2,15 @@
 //Definitions
 const int HR_RX = 7;
 const int LED = 13;
-const int PIEZO = 8;
 
+volatile unsigned long polar34LastBeatTime = 0;
+volatile int polar34Bpm = 0;
 
 byte oldSample, sample;
 boolean ledLight = false; 
 unsigned long beatTimes[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long lastCalculation;
+
 
 void setupPolarT34() {
   pinMode (HR_RX, INPUT);  //Signal pin to input  
@@ -20,26 +22,21 @@ void setupPolarT34() {
 }
 
 void showBeatTimes() {
-   Serial.print(beatTimes[0]);
-   Serial.print(":");
-   Serial.print(beatTimes[1]);
-   Serial.print(":");
-   Serial.print(beatTimes[2]);
-   Serial.print(":");
-   Serial.print(beatTimes[3]);
-   Serial.print(":");
-   Serial.print(beatTimes[4]);
-   Serial.print(":");
-   Serial.print(beatTimes[5]);
-   Serial.print(":");
-   Serial.print(beatTimes[6]);
-   Serial.print(":");
-   Serial.print(beatTimes[7]);
-   Serial.print(":");
-   Serial.print(beatTimes[8]);
-   Serial.print(":");
-   Serial.print(beatTimes[9]);
+   for(int i = 0; i < 9; i++)
+   {
+      Serial.print(beatTimes[i]);
+      Serial.print(":");
+   }
    Serial.println("");
+   
+   
+   for(int i = 0; i < 9; i++)
+   {
+      Serial.print(rate[i]);
+      Serial.print(":");
+   }
+   Serial.println("");
+   
 }
 
 int sizeOfBeatTimes() {
@@ -48,25 +45,41 @@ int sizeOfBeatTimes() {
 
 void appendIntoBeatTimes(unsigned long beatTime) {
   int i;
+  word polar34RunningTotal = 0;
+  
+  if (polar34LastBeatTime == 0) {
+    polar34LastBeatTime = beatTime;
+    return; 
+  }
+  
   for(i = 0; i < sizeOfBeatTimes()-1; i++) {
     beatTimes[i] = beatTimes[i+1];
+    polar34RunningTotal += beatTimes[i];
   }
-  beatTimes[sizeOfBeatTimes() - 1] = beatTime;
+
+  beatTimes[sizeOfBeatTimes() - 1] = beatTime - polar34LastBeatTime;
+  polar34LastBeatTime = beatTime;
+
+  polar34RunningTotal += beatTimes[sizeOfBeatTimes()-1];
+  polar34RunningTotal /= 10;
+  polar34Bpm = 60000/polar34RunningTotal;
 }
 
 void showBpm() {
+  // showBeatTimes();
+
   if (beatTimes[0] != 0 && beatTimes[sizeOfBeatTimes()-1] != 0) {
-    unsigned long bpm = sizeOfBeatTimes() / ((beatTimes[sizeOfBeatTimes()-1] - beatTimes[0]) / 1000.0 / 60.0);
+    
     Serial.print("Polar      : ");
-    Serial.print(bpm);
+    Serial.print(polar34Bpm);
     Serial.println("bpm");
-    Serial.println(sizeOfBeatTimes());
-    showBeatTimes();
+    // showBeatTimes();
   }
   else {
      Serial.println("Not enough data"); 
   }
 }
+
 
 void loopPolarT34() {
   sample = digitalRead(HR_RX);  //Store signal output 
