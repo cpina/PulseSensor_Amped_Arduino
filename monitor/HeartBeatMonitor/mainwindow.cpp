@@ -52,16 +52,23 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     QPoint p1;
     QPoint p2;
 
-    for (int bpm = 40; bpm < 180; bpm += 20)
-    {
-        int height = ui->graph->height();
-        int width = ui->graph->width();
+    const int header = 100;
+    const int height = ui->graph->height() - header;
+    const int width = ui->graph->width();
+    const int minimumBpm = 80;
+    const int maximumBpm = 140;
+    const int bpmLineIncrements = 20;
+    const int bpmPixelsIncrements = height / ((maximumBpm - minimumBpm) / bpmLineIncrements);
 
+    int lineNumber = 0;
+
+    for (int bpm = minimumBpm; bpm <= maximumBpm; bpm += bpmLineIncrements)
+    {
         p1.setX(50);
-        p1.setY(height - ((bpm / 160.0) * height));
+        p1.setY(height - (bpmPixelsIncrements * lineNumber));
 
         p2.setX(width);
-        p2.setY(height - ((bpm / 160.0) * height));
+        p2.setY(height - (bpmPixelsIncrements * lineNumber));
 
         painter->setPen(QPen(Qt::gray, 2));
         painter->drawLine(p1, p2);
@@ -69,6 +76,8 @@ void MainWindow::drawVerticalScale(QPainter* painter)
         p1.setX(p1.x()-40);
         p1.setY(p1.y());
         painter->drawText(p1, QString::number(bpm));
+
+        lineNumber++;
     }
 }
 

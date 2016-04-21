@@ -61,7 +61,6 @@ def main():
             name=m.group(1)
             bpm=m.group(2)
 
-            print("Processed:",name,bpm)
             if name not in ['Polar', 'PulseSensor']:
                 continue
 
