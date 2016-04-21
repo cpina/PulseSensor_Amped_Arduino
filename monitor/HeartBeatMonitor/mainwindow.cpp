@@ -52,10 +52,10 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     QPoint p1;
     QPoint p2;
 
-    const int header = 100;
-    const int height = ui->graph->height() - header;
-    const int width = ui->graph->width();
-    const int minimumBpm = 80;
+    const int header = 0;
+    const int height = painter->viewport().height() - header;
+    const int width = painter->viewport().width();
+    const int minimumBpm = 60;
     const int maximumBpm = 140;
     const int bpmLineIncrements = 20;
     const int bpmPixelsIncrements = height / ((maximumBpm - minimumBpm) / bpmLineIncrements);
@@ -65,10 +65,10 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     for (int bpm = minimumBpm; bpm <= maximumBpm; bpm += bpmLineIncrements)
     {
         p1.setX(50);
-        p1.setY(yPositionForBpm(bpm));
+        p1.setY(yPositionForBpm(painter, bpm));
 
         p2.setX(width);
-        p2.setY(yPositionForBpm(bpm));
+        p2.setY(yPositionForBpm(painter, bpm));
 
         painter->setPen(QPen(Qt::gray, 2));
         painter->drawLine(p1, p2);
@@ -81,10 +81,10 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     }
 }
 
-int MainWindow::yPositionForBpm(int bpm)
+int MainWindow::yPositionForBpm(QPainter *painter, int bpm)
 {
-    const int header = 100;
-    const int height = ui->graph->height() - header;
+    const int header = 50;
+    const int height = painter->viewport().height() - header;
     const int minimumBpm = 60;
     const int maximumBpm = 140;
 
@@ -93,15 +93,14 @@ int MainWindow::yPositionForBpm(int bpm)
     int totalBpm = maximumBpm - minimumBpm;
 
     float percentage = (float(bpm)-minimumBpm) / totalBpm;
-    int position = height - (percentage * height);
+    int position = height - (percentage * height) + header;
 
     return position;
 }
 
 void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBeat1, FileReader::HeartBeat heartBeat2, quint64 minimumTimestamp, quint64 maximumTimestamp, const QColor& color)
 {
-    int height = ui->graph->height() - 100;
-    int width = ui->graph->width();
+    int width = painter->viewport().width();
 
     QPoint p1;
     QPoint p2;
@@ -111,12 +110,11 @@ void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBe
     x = (float(heartBeat1.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
 
     p1.setX(x);
-    //p1.setY(height - ((heartBeat1.bpm / 140.0) * height));
-    p1.setY(yPositionForBpm(heartBeat1.bpm));
+    p1.setY(yPositionForBpm(painter, heartBeat1.bpm));
 
     x = (float(heartBeat2.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
     p2.setX(x);
-    p2.setY(yPositionForBpm(heartBeat2.bpm));
+    p2.setY(yPositionForBpm(painter, heartBeat2.bpm));
 
     painter->setPen(QPen(color, 2));
     painter->drawLine(p1, p2);
@@ -127,6 +125,7 @@ void MainWindow::updateGraphic()
     QHash<QString, FileReader::HeartBeatList> heartBeatsData = m_fileReader.heartBeatData();
 
     QPicture picture;
+    picture.setBoundingRect(QRect(ui->graph->rect()));
     QPainter painter(&picture);
 
     Q_FOREACH(const QString& device, heartBeatsData.keys())
@@ -180,4 +179,9 @@ void MainWindow::updateGraphic()
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    updateGraphic();
 }

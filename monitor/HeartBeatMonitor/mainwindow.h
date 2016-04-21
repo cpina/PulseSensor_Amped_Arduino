@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void resizeEvent(QResizeEvent* event);
+
 private slots:
     void updateData();
 
@@ -25,7 +28,7 @@ private:
     void updateInformation();
     void updateGraphic();
     void drawVerticalScale(QPainter* painter);
-    int yPositionForBpm(int bpm);
+    int yPositionForBpm(QPainter* painter, int bpm);
 
     Ui::MainWindow *ui;
     FileReader m_fileReader;

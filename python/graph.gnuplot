@@ -1,6 +1,6 @@
 set datafile separator ","
 set zeroaxis
-set yrange[0:180]
+set yrange[60:140]
 set xlabel "Time (s)"
 set ylabel "bpm"
 # set nokey
