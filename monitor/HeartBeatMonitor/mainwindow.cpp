@@ -65,10 +65,10 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     for (int bpm = minimumBpm; bpm <= maximumBpm; bpm += bpmLineIncrements)
     {
         p1.setX(50);
-        p1.setY(height - (bpmPixelsIncrements * lineNumber));
+        p1.setY(yPositionForBpm(bpm));
 
         p2.setX(width);
-        p2.setY(height - (bpmPixelsIncrements * lineNumber));
+        p2.setY(yPositionForBpm(bpm));
 
         painter->setPen(QPen(Qt::gray, 2));
         painter->drawLine(p1, p2);
@@ -81,9 +81,26 @@ void MainWindow::drawVerticalScale(QPainter* painter)
     }
 }
 
+int MainWindow::yPositionForBpm(int bpm)
+{
+    const int header = 100;
+    const int height = ui->graph->height() - header;
+    const int minimumBpm = 60;
+    const int maximumBpm = 140;
+
+    //int position = (bpm-minimumBpm)*height;
+
+    int totalBpm = maximumBpm - minimumBpm;
+
+    float percentage = (float(bpm)-minimumBpm) / totalBpm;
+    int position = height - (percentage * height);
+
+    return position;
+}
+
 void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBeat1, FileReader::HeartBeat heartBeat2, quint64 minimumTimestamp, quint64 maximumTimestamp, const QColor& color)
 {
-    int height = ui->graph->height();
+    int height = ui->graph->height() - 100;
     int width = ui->graph->width();
 
     QPoint p1;
@@ -94,11 +111,12 @@ void MainWindow::drawLinePoints(QPainter* painter, FileReader::HeartBeat heartBe
     x = (float(heartBeat1.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
 
     p1.setX(x);
-    p1.setY(height - ((heartBeat1.bpm / 160.0) * height));
+    //p1.setY(height - ((heartBeat1.bpm / 140.0) * height));
+    p1.setY(yPositionForBpm(heartBeat1.bpm));
 
     x = (float(heartBeat2.msTimeStamp) - minimumTimestamp) / (maximumTimestamp - minimumTimestamp)*width;
     p2.setX(x);
-    p2.setY(height - ((heartBeat2.bpm / 160.0) * height));
+    p2.setY(yPositionForBpm(heartBeat2.bpm));
 
     painter->setPen(QPen(color, 2));
     painter->drawLine(p1, p2);

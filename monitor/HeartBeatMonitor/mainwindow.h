@@ -25,6 +25,7 @@ private:
     void updateInformation();
     void updateGraphic();
     void drawVerticalScale(QPainter* painter);
+    int yPositionForBpm(int bpm);
 
     Ui::MainWindow *ui;
     FileReader m_fileReader;
