@@ -173,6 +173,10 @@ void MainWindow::updateGraphic()
     }
 
     ui->graph->setPicture(picture);
+
+    // setPicture changes the size policy and then the app can't be resize smaller
+    ui->graph->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+
     ui->graph->show();
 }
 
